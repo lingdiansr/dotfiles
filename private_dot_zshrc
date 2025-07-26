@@ -1,0 +1,118 @@
+# 终端设置
+
+# 设置默认编辑器为Nvim
+EDITOR=nvim
+
+# 设置历史记录文件路径
+HISTFILE=~/.zsh_history
+
+# 内存中保存的历史记录数量
+HISTSIZE=100000
+
+# 历史记录文件中保存的命令数量
+SAVEHIST=100000
+
+# 关键配置：启用跨会话历史记录
+setopt INC_APPEND_HISTORY        # 实时追加命令到历史文件
+setopt EXTENDED_HISTORY          # 记录时间戳和持续时间
+setopt SHARE_HISTORY             # 在会话间共享历史记录
+setopt HIST_IGNORE_DUPS          # 忽略重复命令
+setopt HIST_IGNORE_SPACE         # 忽略空格开头的命令（隐私保护）
+
+
+# 命令增强
+bindkey -s '\e\e' '\C-asudo \C-e'
+alias vim=nvim
+alias cman='man -M /usr/share/man/zh_CN'
+alias yay=paru
+alias ls="eza --icons"
+alias ll="eza --icons -l"
+alias lsi="eza --icons -il --links"
+alias cat="bat"
+alias copy="xclip -selection <"
+alias nvg="neovide"
+alias frbcg="flutter_rust_bridge_codegen"
+# 终端插件
+
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+sk --shell zsh > ~/.zfunc/_sk
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/autojump/autojump.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+autoload -U compinit; compinit
+source ~/code/Other/fzf-tab/fzf-tab.plugin.zsh
+
+
+# 软件安装
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+#source /usr/share/nvm/init-nvm.sh
+
+
+# fvm
+export FVM_CACHE_PATH="$HOME/.fvm"
+export PATH=$HOME/.fvm/default/bin:$PATH
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+#aliyunpan
+export ALIYUNPAN_CONFIG_DIR=/home/ldsr/.config/aliyunpan/config
+
+# JAVA
+export JAVA_HOME=/usr/lib/jvm/default
+export PATH=$PATH:$JAVA_HOME/bin
+___MY_VMOPTIONS_SHELL_FILE="${HOME}/.jetbrains.vmoptions.sh"; if [ -f "${___MY_VMOPTIONS_SHELL_FILE}" ]; then . "${___MY_VMOPTIONS_SHELL_FILE}"; fi
+
+
+# 其他环境变量
+export XMODIFIERS=@im=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XDG_CONFIG_HOME=$HOME/.config
+export PARU_DLSH=$HOME/code/Other/dotfile_and_config/shells
+
+export PATH=$HOME/code/Other/script:$PATH
+# 下载换源
+# NVM淘宝源
+export NVM_NODEJS_ORG_MIRROR=https://npmmirror.com/mirrors/node/
+
+# Flutter中国源
+export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+
+# Rust清华源
+export RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+export RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Hanlp官方中国源
+export HANLP_URL=https://ftp.hankcs.com/hanlp/
+export HANLP_HOME=/data/hanlp
+
+# uv pip包清华源
+export UV_DEFAULT_INDEX=https://pypi.tuna.tsinghua.edu.cn/simple
+
+
+# 终端美化
+# 设置窗口标题为当前路径
+autoload -Uz add-zsh-hook
+
+function set_win_title() {
+    # 使用 print -Pn 安全输出带格式的路径
+    print -Pn "\e]0;%~\a"
+}
+
+# 在每次命令提示符显示前更新标题
+add-zsh-hook precmd set_win_title
+eval "$(starship init zsh)"
+
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/ldsr/.config/.dart-cli-completion/zsh-config.zsh ]] && . /home/ldsr/.config/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
