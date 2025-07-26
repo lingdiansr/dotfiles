@@ -41,7 +41,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/autojump/autojump.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 autoload -U compinit; compinit
-source ~/code/Other/fzf-tab/fzf-tab.plugin.zsh
+source ~/code/Other/script/fzf-tab/fzf-tab.plugin.zsh
 
 
 # 软件安装
