@@ -43,6 +43,7 @@ alias cat="bat"
 alias copy="xclip -selection <"
 alias nvg="neovide"
 alias frbcg="flutter_rust_bridge_codegen"
+alias docker="podman"
 # 终端插件
 
 # fzf
