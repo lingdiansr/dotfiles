@@ -14,9 +14,9 @@ end
 
 config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
 config.font = wezterm.font_with_fallback({
-	"JetBrains Mono NL",
+	"JetBrains Mono",
 	"LXGW WenKai",
-	"Noto Color Emoji",
+	"Noto Emoji",
 })
 config.window_padding = {
 	left = "0cell",

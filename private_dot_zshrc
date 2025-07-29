@@ -1,7 +1,8 @@
 # 终端设置
 
 # 设置默认编辑器为Nvim
-EDITOR=nvim
+export EDITOR=nvim
+export SYSTEM_EDITOR=nvim
 
 # 设置历史记录文件路径
 HISTFILE=~/.zsh_history
@@ -21,10 +22,20 @@ setopt HIST_IGNORE_SPACE         # 忽略空格开头的命令（隐私保护）
 
 
 # 命令增强
-bindkey -s '\e\e' '\C-asudo \C-e'
-alias vim=nvim
+
+# 定义函数：在行首添加 sudo
+sudo-command-line() {
+    [[ -z $BUFFER ]] && zle up-history  # 如果缓冲区为空，取上一条命令
+    BUFFER="sudo $BUFFER"
+    zle end-of-line  # 光标移到行尾（可选）
+}
+zle -N sudo-command-line
+
+bindkey '\e\e' sudo-command-line  # 绑定到 Esc Esc
+
+alias vim='nvim'
 alias cman='man -M /usr/share/man/zh_CN'
-alias yay=paru
+alias yay='paru'
 alias ls="eza --icons"
 alias ll="eza --icons -l"
 alias lsi="eza --icons -il --links"
@@ -41,8 +52,8 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/autojump/autojump.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 autoload -U compinit; compinit
-source ~/code/Other/script/fzf-tab/fzf-tab.plugin.zsh
-
+source /home/ldsr/code/Other/script/fzf-tab/fzf-tab.plugin.zsh
+source /home/ldsr/code/Other/script/toggle-fzf-theme.zsh
 
 # 软件安装
 # NVM
