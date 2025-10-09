@@ -1,7 +1,6 @@
 {
-	"all-proxy-backup": "",
 	"auto-check-update": false,
-	"auto-hide-window": true,
+	"auto-hide-window": false,
 	"auto-sync-tracker": true,
 	"enable-upnp": true,
 	"engine-max-connection-per-server": 64,
@@ -15,7 +14,7 @@
 	"keep-seeding": false,
 	"keep-window-state": false,
 	"last-check-update-time": 0,
-	"last-sync-tracker-time": 1753788496764,
+	"last-sync-tracker-time": 1759934872334,
 	"locale": "zh-CN",
 	"log-level": "warn",
 	"new-task-show-downloading": true,
@@ -25,20 +24,34 @@
 		"magnet": true,
 		"thunder": false
 	},
+	"proxy": {
+		"enable": false,
+		"server": "",
+		"bypass": "",
+		"scope": [
+			"download",
+			"update-app",
+			"update-trackers"
+		]
+	},
 	"resume-all-when-app-launched": true,
 	"run-mode": 1,
 	"show-progress-bar": true,
 	"task-notification": true,
 	"theme": "auto",
 	"tracker-source": [
-		"https://fastly.jsdelivr.net/gh/ngosang/trackerslist/trackers_best_ip.txt",
-		"https://fastly.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt",
-		"https://fastly.jsdelivr.net/gh/ngosang/trackerslist/trackers_all.txt",
-		"https://fastly.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_ip.txt"
+		"https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt",
+		"https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best_ip.txt",
+		"https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_ip.txt",
+		"https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all.txt",
+		"https://cdn.jsdelivr.net/gh/XIU2/TrackersListCollection/best.txt",
+		"https://cdn.jsdelivr.net/gh/XIU2/TrackersListCollection/all.txt",
+		"https://cdn.jsdelivr.net/gh/XIU2/TrackersListCollection/http.txt"
 	],
 	"tray-theme": "auto",
 	"tray-speedometer": false,
 	"update-channel": "latest",
-	"use-proxy": false,
-	"window-state": {}
+	"window-state": {},
+	"all-proxy-backup": "",
+	"use-proxy": false
 }

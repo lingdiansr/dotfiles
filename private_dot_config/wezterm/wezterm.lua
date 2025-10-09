@@ -1,5 +1,6 @@
 local wezterm = require("wezterm")
 local config = {}
+local act = wezterm.action
 if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
@@ -118,4 +119,18 @@ for i = 1, 9 do
 		action = wezterm.action.ActivateTab(i - 1),
 	})
 end
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+		mods = "NONE",
+		alt_screen = false,
+		action = act.ScrollByLine(-5), -- 负数=向上
+	},
+	{
+		event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+		mods = "NONE",
+		alt_screen = false,
+		action = act.ScrollByLine(5), -- 正数=向下
+	},
+}
 return config

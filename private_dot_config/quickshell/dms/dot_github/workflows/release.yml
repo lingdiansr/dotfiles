@@ -1,0 +1,97 @@
+# Release from a dispatch event from the danklinux repo
+name: Create Release from DMS
+
+on:
+  repository_dispatch:
+    types: [dms_release]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.client_payload.tag }}
+  cancel-in-progress: true
+
+jobs:
+  create_release_from_dms:
+    runs-on: ubuntu-24.04
+    env:
+      TAG: ${{ github.event.client_payload.tag }}
+      DMS_REPO: ${{ github.event.client_payload.dms_repo }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure VERSION and tag
+        run: |
+          set -euxo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # create/update VERSION file to match incoming tag
+          echo "${TAG}" > VERSION
+          if ! git diff --quiet -- VERSION; then
+            git add VERSION
+            git commit -m "Add VERSION file for ${TAG} (from DMS)"
+          fi
+
+          # If tag doesn't exist (or differs), (re)create it
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "Tag ${TAG} already exists"
+          else
+            git tag "${TAG}"
+          fi
+
+          # Push commit (if any) and tag
+          git push --follow-tags origin HEAD
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          set -e
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --oneline --pretty=format:"- %s (%h)" | head -50)
+          else
+            CHANGELOG=$(git log --oneline --pretty=format:"- %s (%h)" "${PREVIOUS_TAG}..${TAG}")
+          fi
+
+          cat > CHANGELOG.md << EOF
+          ## What's Changed
+
+          $CHANGELOG
+
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREVIOUS_TAG}...${TAG}
+          EOF
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create/Update DankMaterialShell Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: Release ${{ env.TAG }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ contains(env.TAG, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download DMS release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euxo pipefail
+          # gh is preinstalled on ubuntu-24.04; auth via GH_TOKEN env
+          gh release download "${TAG}" -R "${DMS_REPO}" --dir ./_dms_assets
+
+      - name: Attach DMS assets to DankMaterialShell release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          files: _dms_assets/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

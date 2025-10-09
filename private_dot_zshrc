@@ -108,6 +108,10 @@ export HANLP_HOME=/data/hanlp
 # uv pip包清华源
 export UV_DEFAULT_INDEX=https://pypi.tuna.tsinghua.edu.cn/simple
 
+# go 依赖中国源
+export GO111MODULE=on
+export GOPROXY="https://goproxy.cn,direct|https://mirrors.aliyun.com/goproxy/,direct"
+export GOSUMDB=off
 
 # 终端美化
 # 设置窗口标题为当前路径
